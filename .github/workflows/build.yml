@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
 
     steps:
     - name: Checkout code
@@ -30,6 +31,36 @@ jobs:
       run: |
         pip install --upgrade pip
         pip install buildozer cython==0.29.34
+
+    - name: Pre-cache freetype (savannah.gnu.org unreachable from CI)
+      run: |
+        PKG_DIR="$PWD/.buildozer/android/platform/build-arm64-v8a_armeabi-v7a/packages/freetype"
+        mkdir -p "$PKG_DIR"
+        cd "$PKG_DIR"
+        FT="freetype-2.10.1.tar.gz"
+        OK=0
+        for URL in \
+          "https://ftp.gnu.org/gnu/freetype/$FT" \
+          "https://mirrors.kernel.org/gnu/freetype/$FT" \
+          "https://download-mirror.savannah.gnu.org/releases/freetype/$FT" \
+          "https://mirror.clarkson.edu/gnu/freetype/$FT" \
+          "https://mirrors.ocf.berkeley.edu/gnu/freetype/$FT"
+        do
+          echo "==> Trying $URL"
+          if curl -fsSL --retry 2 --connect-timeout 15 --max-time 180 "$URL" -o "$FT.part"; then
+            mv "$FT.part" "$FT"
+            touch ".mark-$FT"
+            echo "==> Downloaded freetype from $URL"
+            ls -la
+            OK=1
+            break
+          fi
+          rm -f "$FT.part"
+        done
+        if [ "$OK" != "1" ]; then
+          echo "!! All mirrors failed"
+          exit 1
+        fi
 
     - name: Build APK
       run: buildozer -v android debug
