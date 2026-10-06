@@ -31,11 +31,6 @@ jobs:
         pip install --upgrade pip
         pip install buildozer cython==0.29.34
 
-    - name: Fix minapi and p4a branch in buildozer.spec
-      run: |
-        sed -i 's/^android.minapi.*/android.minapi = 24/' buildozer.spec
-        grep -q "p4a.branch" buildozer.spec || echo "p4a.branch = v2024.01.21" >> buildozer.spec
-
     - name: Build APK
       run: buildozer -v android debug
 
