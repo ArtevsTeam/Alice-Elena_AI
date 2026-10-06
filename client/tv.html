@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#0a0a0d">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/icon-192.png">
+<link rel="stylesheet" href="/tv.css">
+<title>Elena TV</title>
+</head>
+<body>
+
+<!-- ЭКРАН ПОДКЛЮЧЕНИЯ -->
+<div id="connect-screen" class="screen active">
+  <div class="conn-box">
+    <div class="logo">🎵 Elena</div>
+    <div class="conn-title">Подключение к серверу</div>
+    <div class="conn-status" id="conn-status">Ищу сервер в сети…</div>
+    <div class="conn-actions">
+      <button class="big-btn" id="btn-rescan">🔍 Искать</button>
+      <button class="big-btn" id="btn-manual">✎ Ввести адрес</button>
+    </div>
+    <div class="conn-manual" id="conn-manual">
+      <input type="text" id="server-url" placeholder="http://192.168.1.100:8765" autocomplete="off">
+      <button class="big-btn" id="btn-connect">Подключиться</button>
+    </div>
+  </div>
+</div>
+
+<!-- ГЛАВНЫЙ ЭКРАН -->
+<div id="main-screen" class="screen">
+
+  <header class="tv-top">
+    <div class="tv-title">🎵 Elena</div>
+    <div class="tv-server" id="tv-server">—</div>
+    <button class="tv-icon" id="btn-change-server" tabindex="0" title="Сменить сервер">⚙</button>
+  </header>
+
+  <main class="tv-body">
+    <div class="tv-now">
+      <div class="tv-cover" id="tv-cover"></div>
+      <div class="tv-meta">
+        <div class="tv-track" id="tv-track">—</div>
+        <div class="tv-artist" id="tv-artist">—</div>
+        <div class="tv-progress"><div class="tv-progress-fill" id="tv-progress"></div></div>
+        <div class="tv-times"><span id="tv-cur">0:00</span><span id="tv-dur">0:00</span></div>
+      </div>
+    </div>
+
+    <div class="tv-controls">
+      <button class="tv-btn" id="tv-prev" tabindex="0">
+        <svg viewBox="0 0 24 24"><path d="M6 6v12M18 6l-9 6 9 6z"/></svg>
+        <span>Назад</span>
+      </button>
+      <button class="tv-btn tv-btn-main" id="tv-play" tabindex="0">
+        <svg viewBox="0 0 24 24" id="tv-play-ico"><path d="M7 5v14l12-7z"/></svg>
+        <span id="tv-play-label">Играть</span>
+      </button>
+      <button class="tv-btn" id="tv-next" tabindex="0">
+        <svg viewBox="0 0 24 24"><path d="M18 6v12M6 6l9 6-9 6z"/></svg>
+        <span>Дальше</span>
+      </button>
+      <button class="tv-btn tv-btn-voice" id="tv-voice" tabindex="0">
+        <svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+        <span>Голос</span>
+      </button>
+      <button class="tv-btn" id="tv-wave" tabindex="0">
+        <svg viewBox="0 0 24 24"><path d="M2 12s3-7 6-7 4 5 4 5 1 7 4 7 6-5 6-5"/></svg>
+        <span>Волна</span>
+      </button>
+    </div>
+
+    <div class="tv-extra">
+      <div class="tv-vol-row">
+        <span>🔊</span>
+        <input type="range" id="tv-vol" min="0" max="100" value="70" tabindex="0">
+        <span id="tv-vol-val">70</span>
+      </div>
+      <div class="tv-row">
+        <button class="tv-chip" data-wave="genre:allrock" tabindex="0">🎸 Рок</button>
+        <button class="tv-chip" data-wave="genre:pop" tabindex="0">🎤 Поп</button>
+        <button class="tv-chip" data-wave="genre:hiphop" tabindex="0">🎧 Хип-хоп</button>
+        <button class="tv-chip" data-wave="genre:jazz" tabindex="0">🎷 Джаз</button>
+        <button class="tv-chip" data-wave="genre:classical" tabindex="0">🎻 Классика</button>
+        <button class="tv-chip" data-wave="genre:electro" tabindex="0">🎹 Электроника</button>
+      </div>
+      <div class="tv-row">
+        <button class="tv-chip" id="chip-liked" tabindex="0">❤ Любимые</button>
+        <button class="tv-chip" id="chip-playlists" tabindex="0">📚 Плейлисты</button>
+      </div>
+    </div>
+  </main>
+
+  <div class="tv-toast-wrap" id="tv-toasts"></div>
+
+  <div class="tv-voice-overlay" id="voice-overlay">
+    <div class="voice-rings"></div>
+    <div class="voice-text" id="voice-text">Слушаю…</div>
+  </div>
+
+  <div class="tv-modal" id="playlists-modal">
+    <div class="tv-modal-inner">
+      <div class="tv-modal-head">
+        <span>Плейлисты</span>
+        <button class="tv-icon" id="pl-close" tabindex="0">✕</button>
+      </div>
+      <div class="tv-modal-body" id="pl-list"></div>
+    </div>
+  </div>
+</div>
+
+<script src="/tv.js"></script>
+</body>
+</html>

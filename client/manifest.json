@@ -1,0 +1,42 @@
+{
+  "name": "Elena Music",
+  "short_name": "Elena",
+  "description": "Музыкальный ассистент Елена",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#1e1f22",
+  "theme_color": "#5865f2",
+  "lang": "ru",
+  "dir": "ltr",
+  "categories": ["music", "entertainment"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Моя волна",
+      "short_name": "Волна",
+      "url": "/?action=my_wave",
+      "icons": [{"src": "/icon-192.png", "sizes": "192x192"}]
+    },
+    {
+      "name": "Любимые треки",
+      "short_name": "Любимые",
+      "url": "/?action=play_liked",
+      "icons": [{"src": "/icon-192.png", "sizes": "192x192"}]
+    }
+  ]
+}

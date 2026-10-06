@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0d">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/icon-192.png">
+<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/extra.css">
+<title>Elena</title>
+</head>
+<body>
+<div class="bg-blur" id="bg-blur"></div>
+<div class="wave-anim" id="wave-anim"><div class="wave-core"></div></div>
+
+<div id="app">
+  <aside class="rail">
+    <button class="rail-btn active" data-view="library" title="Сейчас играет">
+      <svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+    </button>
+    <button class="rail-btn" data-view="liked" title="Любимые">
+      <svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+    </button>
+    <button class="rail-btn" data-view="search" title="Поиск">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    </button>
+    <button class="rail-btn" id="btn-mic" title="Голос">
+      <svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+    </button>
+    <button class="rail-btn" id="btn-settings" title="Настройки">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/></svg>
+    </button>
+    <div class="spacer"></div>
+    <button class="acc-btn" id="acc-btn" title="Аккаунт"></button>
+    <div class="acc-popup" id="acc-popup"></div>
+  </aside>
+
+  <aside class="sidebar">
+    <header class="sidebar-header">
+      <span id="assistant-title">Elena</span>
+      <button class="icon-btn" id="btn-refresh" title="Обновить">
+        <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7L21 8M21 3v5h-5"/></svg>
+      </button>
+    </header>
+    <div class="sidebar-scroll">
+      <section class="section">
+        <button class="sec-head" data-sec="foryou"><span class="caret">▾</span> Сделано для вас</button>
+        <div class="sec-body" id="foryou-body">
+          <div class="empty">Загрузка…</div>
+        </div>
+      </section>
+      <section class="section">
+        <button class="sec-head" data-sec="browse"><span class="caret">▾</span> Обзор</button>
+        <div class="sec-body">
+          <button class="chan" data-view="chart">
+            <span class="chan-ico">📈</span>
+            <span class="chan-name">Чарт</span>
+          </button>
+          <button class="chan" data-view="releases">
+            <span class="chan-ico">🆕</span>
+            <span class="chan-name">Новинки</span>
+          </button>
+          <button class="chan" data-view="stations">
+            <span class="chan-ico">📻</span>
+            <span class="chan-name">Станции</span>
+          </button>
+        </div>
+      </section>
+      <section class="section">
+        <button class="sec-head" data-sec="lib"><span class="caret">▾</span> Библиотека</button>
+        <div class="sec-body">
+          <button class="chan" data-view="liked">
+            <svg class="chan-ico" viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+            <span class="chan-name">Любимые треки</span>
+          </button>
+        </div>
+      </section>
+      <section class="section">
+        <button class="sec-head" data-sec="pl"><span class="caret">▾</span> Плейлисты</button>
+        <div class="sec-body" id="playlists-body">
+          <div class="empty">Загрузка…</div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Мини-плеер с виниловым диском -->
+    <div class="user-card" id="user-card">
+      <div class="uc-vinyl">
+        <div class="uc-cover" id="uc-cover"></div>
+      </div>
+      <div class="uc-info">
+        <div class="uc-name" id="uc-title">Ничего не играет</div>
+        <div class="uc-sub" id="uc-artist">—</div>
+      </div>
+      <div class="uc-controls">
+        <button class="uc-btn" id="uc-prev" title="Предыдущий">
+          <svg viewBox="0 0 24 24"><path d="M6 6v12M18 6l-9 6 9 6z"/></svg>
+        </button>
+        <button class="uc-btn uc-play" id="uc-play" title="Играть/Пауза">
+          <svg viewBox="0 0 24 24" id="uc-play-ico"><path d="M7 5v14l12-7z"/></svg>
+        </button>
+        <button class="uc-btn" id="uc-next" title="Следующий">
+          <svg viewBox="0 0 24 24"><path d="M18 6v12M6 6l9 6-9 6z"/></svg>
+        </button>
+      </div>
+      <div class="vol-wrap">
+        <svg viewBox="0 0 24 24" class="vol-ico"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8a4 4 0 0 1 0 8"/></svg>
+        <input type="range" id="vol" min="0" max="100" value="70">
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="crumbs">
+        <span id="crumb-sec">Библиотека</span>
+        <span class="sep">/</span>
+        <span id="crumb-title">Сейчас играет</span>
+      </div>
+    </header>
+    <div class="content" id="content">
+      <div class="view" id="np-view">
+        <div class="wave-bar" id="wave-bar">
+          <span class="wb-label" id="wb-station">🌊 Моя волна</span>
+          <span class="wb-sp"></span>
+          <button class="wb-btn" id="wb-more" title="Больше похожего">
+            <svg viewBox="0 0 24 24"><path d="M7 22V11M2 13v7M12 3v18M17 8v13M22 5v16"/></svg>
+          </button>
+          <button class="wb-btn" id="wb-less" title="Меньше похожего">
+            <svg viewBox="0 0 24 24"><path d="M7 22V11M2 13v7M12 3v18M17 8v13M22 5v16"/></svg>
+          </button>
+          <button class="wb-btn" id="wb-settings" title="Настройки волны">⚙</button>
+        </div>
+        <div class="np" id="np">
+          <div class="np-left">
+            <div class="np-cover-wrap">
+              <div class="np-vinyl-ring"></div>
+              <div class="np-cover" id="np-cover"></div>
+            </div>
+            <canvas id="spectrum" class="spectrum"></canvas>
+          </div>
+          <div class="np-right">
+            <div class="np-meta">
+              <div class="np-title" id="np-title">—</div>
+              <div class="np-artist" id="np-artist" title="Открыть страницу исполнителя">Выберите трек</div>
+              <div class="np-album" id="np-album"></div>
+            </div>
+            <div class="np-progress">
+              <span class="t" id="cur-t">0:00</span>
+              <input type="range" id="progress" min="0" max="1000" value="0" step="1">
+              <span class="t" id="dur-t">0:00</span>
+            </div>
+            <div class="np-controls">
+              <button class="ctl" id="btn-shuffle" title="Перемешать">
+                <svg viewBox="0 0 24 24"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+              </button>
+              <button class="ctl" id="btn-prev">
+                <svg viewBox="0 0 24 24"><path d="M6 6v12M18 6l-9 6 9 6z"/></svg>
+              </button>
+              <button class="ctl ctl-primary" id="btn-play">
+                <svg viewBox="0 0 24 24" id="play-ico"><path d="M7 5v14l12-7z"/></svg>
+              </button>
+              <button class="ctl" id="btn-next">
+                <svg viewBox="0 0 24 24"><path d="M18 6v12M6 6l9 6-9 6z"/></svg>
+              </button>
+              <button class="ctl ctl-toggle" id="btn-repeat" title="Повтор трека">
+                <svg viewBox="0 0 24 24"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg>
+              </button>
+              <div class="ctl-sep"></div>
+              <button class="ctl ctl-like" id="btn-like" title="Мне нравится">
+                <svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+              </button>
+              <button class="ctl" id="btn-lyrics" title="Текст песни">
+                <svg viewBox="0 0 24 24"><path d="M4 4h16v12a2 2 0 0 1-2 2H9l-5 4V4z"/><path d="M8 9h8M8 13h5"/></svg>
+              </button>
+              <button class="ctl" id="btn-queue" title="Очередь">
+                <svg viewBox="0 0 24 24"><path d="M3 6h13M3 12h13M3 18h9"/><path d="M18 15v6M15 18h6" transform="translate(1.5,-1.5) scale(0.8)"/></svg>
+              </button>
+              <button class="ctl ctl-eq" id="btn-eq" title="Эквалайзер">
+                <svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-8M22 20V8"/></svg>
+                <span class="eq-badge"></span>
+              </button>
+              <button class="ctl" id="btn-wave" title="Моя волна">
+                <svg viewBox="0 0 24 24"><path d="M2 12s3-7 6-7 4 5 4 5 1 7 4 7 6-5 6-5"/></svg>
+              </button>
+            </div>
+            <div class="np-eq" id="eq-panel">
+              <div class="eq-head"><span>Эквалайзер</span>
+                <label class="switch"><input type="checkbox" id="eq-toggle"><span></span></label>
+              </div>
+              <div class="eq-presets" id="eq-presets"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="view" id="liked-view" style="display:none">
+        <div class="pl-head">
+          <div class="pl-cover liked-cover" id="liked-cover">
+            <svg viewBox="0 0 24 24" fill="#ffffff" aria-hidden="true">
+              <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/>
+            </svg>
+          </div>
+          <div class="pl-info">
+            <div class="pl-title">Любимые треки</div>
+            <div class="pl-sub" id="liked-sub">—</div>
+            <button class="btn-primary" id="liked-play">Играть всё</button>
+          </div>
+        </div>
+        <div class="track-list" id="liked-list"></div>
+      </div>
+
+      <div class="view" id="pl-view" style="display:none">
+        <div class="pl-head">
+          <div class="pl-cover" id="pl-cover"></div>
+          <div class="pl-info">
+            <div class="pl-title" id="pl-title">—</div>
+            <div class="pl-sub" id="pl-sub">—</div>
+            <button class="btn-primary" id="pl-play">Играть</button>
+          </div>
+        </div>
+        <div class="track-list" id="pl-tracks"></div>
+      </div>
+
+      <div class="view" id="chart-view" style="display:none">
+        <div class="pl-head">
+          <div class="pl-cover liked-cover">
+            <span style="font-size:64px">📈</span>
+          </div>
+          <div class="pl-info">
+            <div class="pl-title">Чарт</div>
+            <div class="pl-sub">Что слушают все</div>
+            <button class="btn-primary" id="chart-play">Играть чарт</button>
+          </div>
+        </div>
+        <div class="track-list" id="chart-list"></div>
+      </div>
+
+      <div class="view" id="releases-view" style="display:none">
+        <div class="artist-section">
+          <h3>Новые релизы</h3>
+          <div class="albums-grid" id="releases-grid"></div>
+        </div>
+      </div>
+
+      <div class="view" id="stations-view" style="display:none">
+        <div class="artist-section">
+          <h3>Станции</h3>
+          <div class="stations-grid" id="stations-grid"></div>
+        </div>
+      </div>
+
+      <div class="view" id="artist-view" style="display:none">
+        <div class="artist-hero">
+          <div class="artist-banner" id="artist-banner"></div>
+          <div class="artist-hero-inner">
+            <div class="artist-cover" id="artist-cover"></div>
+            <div class="artist-meta">
+              <div class="artist-label">Исполнитель</div>
+              <div class="artist-name" id="artist-name">—</div>
+              <div class="artist-counts" id="artist-counts"></div>
+            </div>
+          </div>
+        </div>
+        <div class="artist-actions-row">
+          <button class="btn-primary" id="artist-play">▶ Слушать</button>
+          <button class="btn-ghost" id="artist-wave">Волна по артисту</button>
+        </div>
+        <div class="artist-desc" id="artist-desc"></div>
+        <section class="artist-section" id="artist-videos-sec" style="display:none">
+          <h3>Видео</h3>
+          <div class="video-scroll" id="artist-videos"></div>
+        </section>
+        <section class="artist-section" id="artist-top-sec" style="display:none">
+          <h3>Популярные треки</h3>
+          <div class="track-list" id="artist-top"></div>
+        </section>
+        <section class="artist-section" id="artist-albums-sec" style="display:none">
+          <h3>Альбомы</h3>
+          <div class="albums-grid" id="artist-albums"></div>
+        </section>
+      </div>
+
+      <div class="view" id="search-view" style="display:none">
+        <div class="search-box">
+          <input type="text" id="search-input" placeholder="Трек, исполнитель, альбом…" autocomplete="off" list="search-suggest">
+          <datalist id="search-suggest"></datalist>
+        </div>
+        <div class="track-list" id="search-results"></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Радиальное меню "Моя волна" -->
+<div class="wave-radial" id="wave-radial">
+  <div class="wave-radial-backdrop" id="wave-radial-backdrop"></div>
+  <div class="wave-radial-center" id="wave-radial-center">🌊</div>
+  <div class="wave-radial-items" id="wave-radial-items"></div>
+</div>
+
+<!-- Очередь -->
+<div class="queue-back" id="queue-back"></div>
+<aside class="queue-panel" id="queue-panel">
+  <div class="queue-head">
+    <span>Очередь</span>
+    <button class="icon-btn" id="queue-close">✕</button>
+  </div>
+  <div class="queue-body" id="queue-body"></div>
+</aside>
+
+<!-- Текст песни -->
+<div class="modal-back" id="lyrics-back">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="lyrics-title">Текст песни</h3>
+      <button class="icon-btn" id="lyrics-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="lyrics-text" id="lyrics-text">Загрузка…</div>
+    </div>
+  </div>
+</div>
+
+<!-- Настройки волны -->
+<div class="modal-back" id="wave-back">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Настройки волны</h3>
+      <button class="icon-btn" id="wave-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="setting">
+        <label>Настроение</label>
+        <select id="wv-mood">
+          <option value="">Любое</option>
+          <option value="fun">Весёлое</option>
+          <option value="energetic">Бодрое</option>
+          <option value="calm">Спокойное</option>
+          <option value="sad">Грустное</option>
+        </select>
+      </div>
+      <div class="setting">
+        <label>Разнообразие</label>
+        <select id="wv-div">
+          <option value="">Как обычно</option>
+          <option value="favorite">Знакомое</option>
+          <option value="discover">Открытия</option>
+        </select>
+      </div>
+      <div class="setting">
+        <label>Язык</label>
+        <select id="wv-lang">
+          <option value="">Любой</option>
+          <option value="russian">Только русский</option>
+          <option value="notrussian">Без русского</option>
+          <option value="foreign">Иностранный</option>
+        </select>
+      </div>
+      <button class="btn-primary" id="wv-save" style="width:100%">Применить</button>
+    </div>
+  </div>
+</div>
+
+<div id="toasts"></div>
+<div class="dl-badge" id="dl-badge">⇩ Качаю <b id="dl-name"></b>…</div>
+
+<div class="modal-back" id="modal-back">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Настройки</h3>
+      <button class="icon-btn" id="modal-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="setting">
+        <label>Имя ассистента</label>
+        <input type="text" id="set-name">
+      </div>
+      <div class="setting">
+        <label>Качество звука</label>
+        <select id="set-quality">
+          <option value="lossless">Lossless (FLAC)</option>
+          <option value="high">MP3 320</option>
+          <option value="balanced">AAC 192</option>
+          <option value="efficient">AAC 64</option>
+        </select>
+      </div>
+      <div class="setting">
+        <label>Голос TTS</label>
+        <select id="set-speaker">
+          <option>kseniya</option><option>baya</option><option>xenia</option>
+          <option>eugene</option><option>aidar</option>
+        </select>
+      </div>
+      <div class="setting">
+        <label>Микрофон (для ассистента)</label>
+        <select id="set-mic"><option value="">По умолчанию</option></select>
+      </div>
+      <div class="setting">
+        <label>Устройство вывода (голос ассистента)</label>
+        <select id="set-output"><option value="">По умолчанию</option></select>
+      </div>
+      <div class="setting-toggle">
+        <div class="toggle-text">
+          <div class="toggle-title">🎤 Слушать всегда</div>
+          <div class="toggle-desc">Устройство постоянно слушает и реагирует на имя. Требует HTTPS и разрешения на микрофон.</div>
+        </div>
+        <label class="switch"><input type="checkbox" id="set-always-listen"><span></span></label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-back" id="acc-back">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Добавить аккаунт Яндекс</h3>
+      <button class="icon-btn" id="acc-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="steps">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Открой страницу Яндекс OAuth</div>
+          <div class="step-desc">Войди в аккаунт, который хочешь добавить</div>
+        </div>
+      </div>
+      <div class="steps">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Скопируй токен</div>
+          <div class="step-desc">
+            После входа открой адрес вида:<br>
+            <code>...<b>#access_token=y0_AgAAAAB...</b>&token_type=...</code><br>
+            Скопируй <b>только то, что жирным</b>
+          </div>
+        </div>
+      </div>
+      <div class="steps">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Вставь и нажми «Войти»</div>
+        </div>
+      </div>
+      <button class="btn-primary" id="acc-open-oauth" style="width:100%;margin-top:8px">
+        🌐 Открыть Яндекс OAuth
+      </button>
+      <div class="setting" style="margin-top:20px">
+        <label>Access token</label>
+        <textarea id="acc-token" placeholder="y0_AgAAAAB..."></textarea>
+      </div>
+      <button class="btn-primary" id="acc-submit" style="width:100%">Войти</button>
+    </div>
+  </div>
+</div>
+
+<audio id="audio" crossorigin="anonymous"></audio>
+<script src="/app.js"></script>
+</body>
+</html>

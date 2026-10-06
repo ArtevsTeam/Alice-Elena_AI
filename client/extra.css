@@ -1,0 +1,128 @@
+/* ===== ДОП. СТИЛИ: лайки, очередь, текст, волна, каталог ===== */
+
+/* --- Кнопка-сердечко в плеере --- */
+.ctl-like svg{fill:none;stroke:currentColor;stroke-width:2}
+.ctl-like.liked{color:#fff;background:linear-gradient(135deg,#ec4899,#ef4444);
+  box-shadow:0 0 18px rgba(236,72,153,.55)}
+.ctl-like.liked svg{fill:currentColor;stroke:none}
+.ctl-like.bump{animation:likeBump .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes likeBump{40%{transform:scale(1.35)}}
+
+/* --- Тогглы shuffle/repeat --- */
+.ctl-toggle{opacity:.75}
+.ctl-toggle.on{background:linear-gradient(135deg,rgba(168,85,247,.5),rgba(236,72,153,.5));
+  color:#fff;opacity:1;box-shadow:0 0 16px rgba(168,85,247,.45)}
+
+/* --- Сердечко в строке трека --- */
+.m-like{opacity:0;color:var(--text-dim);transition:opacity .12s,color .12s;
+  display:grid;place-items:center;cursor:pointer;padding:4px}
+.m-like svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2}
+.track-row:hover .m-like{opacity:1}
+.m-like:hover{color:var(--accent2)}
+.m-like.liked{opacity:1;color:#ec4899}
+.m-like.liked svg{fill:#ec4899;stroke:none}
+.track-row{grid-template-columns:36px 44px 1fr auto auto auto}
+
+/* --- Панель волны --- */
+.wave-bar{display:none;align-items:center;gap:12px;margin:0 auto 10px;
+  max-width:1050px;padding:10px 16px;border-radius:12px;
+  background:linear-gradient(135deg,rgba(168,85,247,.16),rgba(236,72,153,.16));
+  border:1px solid rgba(168,85,247,.35);backdrop-filter:blur(10px)}
+.wave-bar.on{display:flex}
+.wave-bar .wb-label{font-weight:700;font-size:13px;cursor:pointer;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;
+  color:transparent}
+.wave-bar .wb-sp{flex:1}
+.wb-btn{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(255,255,255,.06);color:var(--text);transition:all .15s;
+  font-size:15px}
+.wb-btn:hover{background:var(--grad);transform:scale(1.08)}
+.wb-btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round}
+
+/* --- Панель очереди (drawer) --- */
+.queue-back{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:150;
+  display:none;backdrop-filter:blur(4px)}
+.queue-back.open{display:block}
+.queue-panel{position:fixed;top:0;right:-420px;bottom:0;width:400px;max-width:92vw;
+  background:rgba(19,19,24,.98);border-left:1px solid var(--border-soft);
+  z-index:151;display:flex;flex-direction:column;
+  transition:right .28s cubic-bezier(.2,.9,.3,1)}
+.queue-panel.open{right:0}
+.queue-head{padding:18px 20px;display:flex;align-items:center;
+  justify-content:space-between;border-bottom:1px solid var(--border-soft);
+  font-weight:700;font-size:15px}
+.queue-head span{background:var(--grad);-webkit-background-clip:text;
+  background-clip:text;color:transparent}
+.queue-body{flex:1;overflow-y:auto;padding:8px}
+.queue-body::-webkit-scrollbar{width:6px}
+.queue-body::-webkit-scrollbar-thumb{background:var(--border-soft);border-radius:3px}
+.q-row{display:grid;grid-template-columns:20px 40px 1fr auto auto;gap:10px;
+  align-items:center;padding:8px 10px;border-radius:10px;cursor:pointer;
+  transition:background .12s}
+.q-row:hover{background:rgba(255,255,255,.05)}
+.q-row.current{background:rgba(168,85,247,.14)}
+.q-row .q-num{color:var(--text-dim);font-size:11px;text-align:center}
+.q-row.current .q-num{color:var(--accent);font-size:14px}
+.q-row .q-cov{width:38px;height:38px;border-radius:6px;background:var(--bg-rail);
+  background-size:cover;background-position:center}
+.q-row .q-title{font-size:13px;color:#fff;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;font-weight:500}
+.q-row.current .q-title{color:var(--accent)}
+.q-row .q-artist{font-size:11px;color:var(--text-muted);overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.q-row .q-dur{font-size:11px;color:var(--text-dim)}
+.q-row .q-rm{opacity:0;color:var(--red);font-size:13px;padding:4px 6px;
+  transition:opacity .12s}
+.q-row:hover .q-rm{opacity:1}
+
+/* --- Модалка текста песни --- */
+.lyrics-text{white-space:pre-line;font-size:15px;line-height:1.9;
+  color:var(--text);max-height:56vh;overflow-y:auto;padding-right:8px}
+.lyrics-empty{color:var(--text-dim);text-align:center;padding:30px 0}
+
+/* --- Каталог: сетки --- */
+.stations-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:16px;padding-bottom:80px}
+.station-card{cursor:pointer;border-radius:12px;overflow:hidden;
+  background:var(--bg-rail);transition:transform .2s,box-shadow .2s;
+  border:1px solid var(--border-soft)}
+.station-card:hover{transform:translateY(-4px);
+  box-shadow:0 12px 32px rgba(168,85,247,.25)}
+.station-card .st-img{width:100%;aspect-ratio:1;background:
+  linear-gradient(135deg,rgba(168,85,247,.3),rgba(236,72,153,.3)) center/cover;
+  display:grid;place-items:center;font-size:34px}
+.station-card .st-name{padding:10px 12px;font-size:13px;font-weight:600;
+  color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* --- Поиск: datalist-подсказки не стилизуются; добавим спиннер малый --- */
+.search-box small{display:block;margin-top:6px;color:var(--text-dim);font-size:11px}
+
+/* --- Уведомление о загрузке трека --- */
+.dl-badge{display:none;position:fixed;bottom:24px;left:24px;z-index:500;
+  padding:8px 14px;border-radius:10px;background:rgba(30,30,40,.95);
+  border:1px solid rgba(168,85,247,.4);color:var(--text-muted);font-size:12px;
+  backdrop-filter:blur(10px)}
+.dl-badge.on{display:block}
+.dl-badge b{color:#fff}
+
+/* --- Меню «в плейлист» --- */
+.m-add{opacity:0;color:var(--text-dim);transition:opacity .12s,color .12s;
+  display:grid;place-items:center;cursor:pointer;padding:4px;font-size:15px}
+.track-row:hover .m-add{opacity:1}
+.m-add:hover{color:var(--accent)}
+.add-menu{position:fixed;z-index:9999;min-width:220px;max-height:300px;overflow-y:auto;
+  background:rgba(19,19,24,.98);border:1px solid var(--border-soft);
+  border-radius:12px;padding:6px;box-shadow:0 12px 40px rgba(0,0,0,.7);
+  animation:popin .15s ease}
+.add-menu button{display:block;width:100%;text-align:left;padding:9px 12px;
+  border-radius:8px;color:var(--text);font-size:13px;transition:background .12s;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.add-menu button:hover{background:var(--bg-hover)}
+.add-menu button.new{color:var(--accent);font-weight:600;
+  border-top:1px solid var(--border-soft);margin-top:4px;padding-top:10px}
+
+@media(max-width:900px){
+  .queue-panel{width:100vw;max-width:100vw}
+  .wave-bar{flex-wrap:wrap}
+}
